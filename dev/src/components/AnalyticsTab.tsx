@@ -117,111 +117,113 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'Increasing':
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
+        return <TrendingUp className="h-4 w-4 text-green-400" />;
       case 'Decreasing':
-        return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
+        return <TrendingUp className="h-4 w-4 text-red-400 rotate-180" />;
       default:
-        return <Activity className="h-4 w-4 text-gray-500" />;
+        return <Activity className="h-4 w-4 text-gray-400" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
       case 'Increasing':
-        return 'text-green-600 bg-green-50';
+        return 'text-green-200 bg-green-500/20 border-green-500/30';
       case 'Decreasing':
-        return 'text-red-600 bg-red-50';
+        return 'text-red-200 bg-red-500/20 border-red-500/30';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return 'text-gray-200 bg-gray-500/20 border-gray-500/30';
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            📊 Advanced Business Intelligence
+    <div className="space-y-8">
+      <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold text-white flex items-center">
+            <span className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl mr-4 flex items-center justify-center text-lg">📊</span>
+            Advanced Business Intelligence
           </h2>
           
           {/* Category Filter */}
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Category:</label>
+          <div className="flex items-center space-x-3">
+            <label className="text-sm font-medium text-gray-200">Category:</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 backdrop-blur-sm"
             >
               {categories.map(category => (
-                <option key={category} value={category}>{category}</option>
+                <option key={category} value={category} className="bg-gray-800 text-white">{category}</option>
               ))}
             </select>
           </div>
         </div>
 
         {/* Performance Analysis Table */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            ⚡ Product Performance Analysis
+        <div className="mb-8">
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <span className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">⚡</span>
+            Product Performance Analysis
           </h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto bg-gray-800/30 rounded-2xl border border-gray-700">
+            <table className="min-w-full">
+              <thead className="bg-gray-800/50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Total Sales
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Avg Daily Sales
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Current Stock
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Sales Trend
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Stock Turn Days
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider">
                     Performance Score
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-700">
                 {filteredAnalysis.slice(0, 20).map((item, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <tr key={index} className="hover:bg-gray-800/30 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">
                       {item.Product}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {item.Category}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {Math.round(item.Total_Sales)}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
+                      {Math.round(item.Total_Sales).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
                       {item.Avg_Daily_Sales.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {Math.round(item.Current_Stock)}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
+                      {Math.round(item.Current_Stock).toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTrendColor(item.Sales_Trend)}`}>
+                      <div className={`inline-flex items-center px-3 py-1 rounded-xl text-xs font-semibold border ${getTrendColor(item.Sales_Trend)}`}>
                         {getTrendIcon(item.Sales_Trend)}
                         <span className="ml-1">{item.Sales_Trend}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
                       {item.Stock_Turn_Days > 100 ? '100+' : Math.round(item.Stock_Turn_Days)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
                       {item.Performance_Score.toFixed(2)}
                     </td>
                   </tr>
@@ -233,26 +235,31 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
       </div>
 
       {/* Performance Visualization */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-8">
         {/* Stock vs Sales Scatter Plot */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            📈 Stock vs Sales Performance
+        <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+            <span className="w-6 h-6 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">📈</span>
+            Stock vs Sales Performance
           </h3>
           <ResponsiveContainer width="100%" height={350}>
             <ScatterChart data={scatterData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis 
                 type="number" 
                 dataKey="x" 
                 name="Current Stock"
-                label={{ value: 'Current Stock', position: 'insideBottom', offset: -10 }}
+                label={{ value: 'Current Stock', position: 'insideBottom', offset: -10, fill: '#9ca3af' }}
+                tick={{ fill: '#9ca3af', fontSize: 12 }}
+                stroke="#6b7280"
               />
               <YAxis 
                 type="number" 
                 dataKey="y" 
                 name="Avg Daily Sales"
-                label={{ value: 'Avg Daily Sales', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'Avg Daily Sales', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
+                tick={{ fill: '#9ca3af', fontSize: 12 }}
+                stroke="#6b7280"
               />
               <Tooltip 
                 cursor={{ strokeDasharray: '3 3' }}
@@ -260,72 +267,87 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-white p-3 border border-gray-300 rounded shadow">
-                        <p className="font-semibold">{data.product}</p>
-                        <p className="text-sm text-gray-600">{data.category}</p>
-                        <p>Stock: {data.x}</p>
-                        <p>Daily Sales: {data.y.toFixed(2)}</p>
-                        <p>Total Sales: {data.totalSales}</p>
+                      <div className="bg-gray-800 p-4 border border-gray-600 rounded-xl shadow-xl backdrop-blur-sm">
+                        <p className="font-semibold text-white">{data.product}</p>
+                        <p className="text-sm text-gray-300">{data.category}</p>
+                        <p className="text-cyan-300">Stock: {data.x.toLocaleString()}</p>
+                        <p className="text-blue-300">Daily Sales: {data.y.toFixed(2)}</p>
+                        <p className="text-green-300">Total Sales: {data.totalSales.toLocaleString()}</p>
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-              <Scatter dataKey="y" fill="#8884d8" />
+              <Scatter dataKey="y" fill="#06b6d4" />
             </ScatterChart>
           </ResponsiveContainer>
         </div>
 
         {/* Category Performance */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            📊 Total Sales by Category
+        <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+            <span className="w-6 h-6 bg-gradient-to-br from-violet-500 to-purple-500 rounded-lg mr-3 flex items-center justify-center text-xs">📊</span>
+            Total Sales by Category
           </h3>
           <ResponsiveContainer width="100%" height={350}>
             <BarChart data={categoryAvgPerformance}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis 
                 dataKey="category" 
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 12, fill: '#9ca3af' }}
                 angle={-45}
                 textAnchor="end"
                 height={80}
+                stroke="#6b7280"
               />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="totalSales" fill="#8884d8" name="Total Sales" />
+              <YAxis 
+                tick={{ fill: '#9ca3af', fontSize: 12 }}
+                stroke="#6b7280"
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: '#1f2937',
+                  border: '1px solid #374151',
+                  borderRadius: '12px',
+                  color: '#ffffff'
+                }}
+              />
+              <Legend 
+                wrapperStyle={{ color: '#9ca3af' }}
+              />
+              <Bar dataKey="totalSales" fill="#8b5cf6" name="Total Sales" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Category Insights */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          🎯 Category Performance Insights
+      <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+          <span className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl mr-3 flex items-center justify-center text-sm">🎯</span>
+          Category Performance Insights
         </h3>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categoryAvgPerformance.slice(0, 6).map((category, index) => (
-            <div key={index} className="bg-gray-50 p-4 rounded-lg border">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold text-gray-900">{category.category}</h4>
-                <BarChart3 className="h-5 w-5 text-gray-500" />
+            <div key={index} className="bg-gray-800/30 p-6 rounded-2xl border border-gray-700 backdrop-blur-sm transition-all duration-300 hover:scale-105">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-bold text-white text-lg">{category.category}</h4>
+                <BarChart3 className="h-6 w-6 text-blue-400" />
               </div>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Total Sales:</span>
-                  <span className="font-medium">{Math.round(category.totalSales).toLocaleString()}</span>
+                  <span className="text-gray-300">Total Sales:</span>
+                  <span className="font-semibold text-cyan-300">{Math.round(category.totalSales).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Products:</span>
-                  <span className="font-medium">{category.count}</span>
+                  <span className="text-gray-300">Products:</span>
+                  <span className="font-semibold text-blue-300">{category.count}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Avg Performance:</span>
-                  <span className="font-medium">{category.avgPerformance.toFixed(2)}</span>
+                  <span className="text-gray-300">Avg Performance:</span>
+                  <span className="font-semibold text-green-300">{category.avgPerformance.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -334,42 +356,43 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
       </div>
 
       {/* Summary Statistics */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          📈 Performance Summary
+      <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+          <span className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl mr-3 flex items-center justify-center text-sm">📈</span>
+          Performance Summary
         </h3>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
-            <Target className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-blue-600">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="bg-blue-500/20 border border-blue-500/30 p-6 rounded-2xl text-center backdrop-blur-sm transition-all duration-300 hover:scale-105">
+            <Target className="h-8 w-8 text-blue-400 mx-auto mb-3" />
+            <div className="text-3xl font-bold text-blue-200 mb-2">
               {filteredAnalysis.filter(item => item.Sales_Trend === 'Increasing').length}
             </div>
-            <div className="text-sm text-blue-700">Growing Products</div>
+            <div className="text-sm text-blue-100 font-medium">Growing Products</div>
           </div>
           
-          <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
-            <TrendingUp className="h-8 w-8 text-green-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-green-600">
+          <div className="bg-green-500/20 border border-green-500/30 p-6 rounded-2xl text-center backdrop-blur-sm transition-all duration-300 hover:scale-105">
+            <TrendingUp className="h-8 w-8 text-green-400 mx-auto mb-3" />
+            <div className="text-3xl font-bold text-green-200 mb-2">
               {Math.round(filteredAnalysis.reduce((sum, item) => sum + item.Performance_Score, 0) / filteredAnalysis.length)}
             </div>
-            <div className="text-sm text-green-700">Avg Performance</div>
+            <div className="text-sm text-green-100 font-medium">Avg Performance</div>
           </div>
           
-          <div className="bg-yellow-50 p-4 rounded-lg text-center border border-yellow-200">
-            <Activity className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-yellow-600">
+          <div className="bg-yellow-500/20 border border-yellow-500/30 p-6 rounded-2xl text-center backdrop-blur-sm transition-all duration-300 hover:scale-105">
+            <Activity className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
+            <div className="text-3xl font-bold text-yellow-200 mb-2">
               {Math.round(filteredAnalysis.reduce((sum, item) => sum + item.Stock_Turn_Days, 0) / filteredAnalysis.length)}
             </div>
-            <div className="text-sm text-yellow-700">Avg Turn Days</div>
+            <div className="text-sm text-yellow-100 font-medium">Avg Turn Days</div>
           </div>
           
-          <div className="bg-purple-50 p-4 rounded-lg text-center border border-purple-200">
-            <BarChart3 className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-purple-600">
+          <div className="bg-purple-500/20 border border-purple-500/30 p-6 rounded-2xl text-center backdrop-blur-sm transition-all duration-300 hover:scale-105">
+            <BarChart3 className="h-8 w-8 text-purple-400 mx-auto mb-3" />
+            <div className="text-3xl font-bold text-purple-200 mb-2">
               {filteredAnalysis.length}
             </div>
-            <div className="text-sm text-purple-700">Products Analyzed</div>
+            <div className="text-sm text-purple-100 font-medium">Products Analyzed</div>
           </div>
         </div>
       </div>

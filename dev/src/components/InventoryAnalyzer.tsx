@@ -136,29 +136,37 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
 
   if (data.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 p-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <div className="text-center mb-8 animate-fade-in">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-4">
               🎯 Smart Inventory Analyzer
             </h1>
-            <p className="text-xl text-gray-600">AI-Powered Inventory Intelligence</p>
+            <p className="text-xl text-gray-300 font-medium">AI-Powered Inventory Intelligence</p>
+            <div className="mt-4 inline-flex items-center px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-sm text-gray-300 backdrop-blur-sm">
+              <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+              Industry-Grade Analytics Platform
+            </div>
           </div>
 
           {/* File Upload Section */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 mb-8 shadow-2xl animate-fade-in">
             <div className="text-center">
-              <Upload className="mx-auto h-16 w-16 text-blue-500 mb-4" />
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Upload className="h-10 w-10 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold text-white mb-4">
                 Upload Your Inventory Data
               </h2>
-              <p className="text-gray-600 mb-6">
-                Upload a CSV file with columns: Date, Product, Sold, Stock (Category optional)
+              <p className="text-gray-300 mb-8 text-lg leading-relaxed max-w-2xl mx-auto">
+                Upload a CSV file with columns: <span className="text-blue-400 font-medium">Date, Product, Sold, Stock</span> 
+                <span className="text-gray-400"> (Category optional)</span>
               </p>
               
-              <label className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
-                <FileText className="mr-2 h-5 w-5" />
+              <label className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold text-lg">
+                <FileText className="mr-3 h-6 w-6" />
                 Choose CSV File
+                <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <input
                   type="file"
                   accept=".csv"
@@ -169,86 +177,100 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
               </label>
               
               {isLoading && (
-                <div className="mt-4">
-                  <div className="inline-flex items-center text-blue-600">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    Processing file...
+                <div className="mt-6 animate-fade-in">
+                  <div className="inline-flex items-center text-blue-400 bg-blue-400/10 px-6 py-3 rounded-xl border border-blue-400/20">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-400 mr-3"></div>
+                    <span className="font-medium">Processing your data...</span>
                   </div>
                 </div>
               )}
               
               {error && (
-                <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                  {error}
+                <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl backdrop-blur-sm animate-fade-in">
+                  <div className="flex items-center justify-center">
+                    <span className="font-medium">{error}</span>
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
           {/* Welcome Content */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 animate-fade-in">
             {/* Features */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">🚀 Key Features</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li className="flex items-center">
-                  <span className="text-green-500 mr-2">✅</span>
-                  🎉 Festival Intelligence - Personalized alerts for Indian festivals
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-500 mr-2">✅</span>
-                  🌤 Weather-Based Recommendations - Smart seasonal suggestions
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-500 mr-2">✅</span>
-                  🤖 AI-Powered Insights - Realistic buying recommendations
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-500 mr-2">✅</span>
-                  📊 Interactive Dashboards - Real-time analytics
-                </li>
-                <li className="flex items-center">
-                  <span className="text-green-500 mr-2">✅</span>
-                  🔮 Predictive Analytics - Accurate restock predictions
-                </li>
+            <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <span className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg mr-3 flex items-center justify-center text-sm">🚀</span>
+                Key Features
+              </h3>
+              <ul className="space-y-4">
+                {[
+                  { icon: "🎉", title: "Festival Intelligence", desc: "Personalized alerts for Indian festivals" },
+                  { icon: "🌤", title: "Weather Recommendations", desc: "Smart seasonal suggestions" },
+                  { icon: "🤖", title: "AI-Powered Insights", desc: "Realistic buying recommendations" },
+                  { icon: "📊", title: "Interactive Dashboards", desc: "Real-time analytics" },
+                  { icon: "🔮", title: "Predictive Analytics", desc: "Accurate restock predictions" }
+                ].map((feature, index) => (
+                  <li key={index} className="flex items-start group">
+                    <span className="text-2xl mr-4 group-hover:scale-110 transition-transform duration-200">{feature.icon}</span>
+                    <div>
+                      <div className="text-white font-semibold group-hover:text-blue-400 transition-colors">
+                        {feature.title}
+                      </div>
+                      <div className="text-gray-400 text-sm">{feature.desc}</div>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Upcoming Festivals */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">🎉 Upcoming Festivals</h3>
+            <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <span className="w-8 h-8 bg-gradient-to-br from-orange-400 to-pink-500 rounded-lg mr-3 flex items-center justify-center text-sm">🎉</span>
+                Upcoming Festivals
+              </h3>
               {upcomingFestivals.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {upcomingFestivals.slice(0, 5).map((festival, index) => {
-                    const urgencyColor = festival.days_until <= 7 ? 'text-red-500' : 
-                                       festival.days_until <= 15 ? 'text-yellow-500' : 'text-green-500';
+                    const urgencyColor = festival.days_until <= 7 ? 'from-red-500 to-red-600' : 
+                                       festival.days_until <= 15 ? 'from-yellow-500 to-orange-500' : 'from-green-500 to-green-600';
                     const urgencyIcon = festival.days_until <= 7 ? '🔴' : 
                                       festival.days_until <= 15 ? '🟡' : '🟢';
                     
                     return (
-                      <div key={index} className="p-3 bg-gray-50 rounded">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">{urgencyIcon} {festival.name}</span>
-                          <span className={`text-sm ${urgencyColor}`}>
-                            {festival.days_until} days away
+                      <div key={index} className="group p-4 bg-gray-800/50 hover:bg-gray-800/70 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-semibold text-white flex items-center">
+                            <span className="mr-2">{urgencyIcon}</span>
+                            {festival.name}
+                          </span>
+                          <span className={`px-3 py-1 bg-gradient-to-r ${urgencyColor} text-white text-sm font-medium rounded-full`}>
+                            {festival.days_until} days
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
-                          📦 Focus on: {festival.products.slice(0, 4).join(', ')}...
+                        <p className="text-gray-400 text-sm">
+                          📦 Focus on: <span className="text-gray-300">{festival.products.slice(0, 4).join(', ')}...</span>
                         </p>
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <p className="text-gray-600">No major festivals in the next 30 days</p>
+                <div className="text-center py-8">
+                  <div className="text-4xl mb-4 opacity-50">🗓️</div>
+                  <p className="text-gray-400">No major festivals in the next 30 days</p>
+                </div>
               )}
             </div>
           </div>
 
           {/* Product Types */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">📂 Works with ANY Product Type</h3>
+          <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 mt-8 shadow-xl animate-fade-in">
+            <h3 className="text-2xl font-bold text-white mb-6 text-center flex items-center justify-center">
+              <span className="w-8 h-8 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-lg mr-3 flex items-center justify-center text-sm">📂</span>
+              Works with ANY Product Type
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
               {[
                 '🥬 Vegetables & Fruits',
@@ -260,10 +282,19 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
                 '🧴 Cosmetics & Beauty',
                 '🌸 Flowers & Decorations'
               ].map((item, index) => (
-                <div key={index} className="p-3 bg-gray-50 rounded text-sm">
-                  {item}
+                <div key={index} className="group p-4 bg-gray-800/30 hover:bg-gray-800/50 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-200 hover:scale-105">
+                  <div className="text-sm text-gray-300 group-hover:text-white transition-colors font-medium">
+                    {item}
+                  </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-12 animate-fade-in">
+            <div className="inline-flex items-center px-6 py-3 bg-gray-800/30 border border-gray-700 rounded-full text-gray-400 backdrop-blur-sm">
+              <span className="text-xs">Powered by Advanced AI Analytics</span>
             </div>
           </div>
         </div>
@@ -272,78 +303,85 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-gray-900/80 backdrop-blur-lg border-b border-gray-700 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+          <div className="flex justify-between items-center py-6">
+            <div className="animate-slide-in">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 🎯 Smart Inventory Analyzer
               </h1>
-              <p className="text-sm text-gray-600">
+              <p className="text-gray-300 mt-1 font-medium">
                 AI-Powered Inventory Intelligence with Predictions
               </p>
             </div>
-            <div className="text-sm text-gray-500">
-              {data.length} records loaded
+            <div className="text-right animate-fade-in">
+              <div className="inline-flex items-center px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-xl text-gray-300 backdrop-blur-sm">
+                <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                <span className="font-semibold text-white">{data.length.toLocaleString()}</span>
+                <span className="ml-1">records loaded</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Sidebar and Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex gap-8">
           {/* Sidebar */}
-          <div className="w-64 flex-shrink-0">
+          <div className="w-80 flex-shrink-0 animate-slide-in">
             {/* Controls */}
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
-              <h3 className="font-semibold text-gray-900 mb-4">🎮 Interactive Controls</h3>
+            <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 mb-6 shadow-xl">
+              <h3 className="font-bold text-white mb-6 flex items-center text-lg">
+                <span className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mr-3 flex items-center justify-center text-xs">🎮</span>
+                Interactive Controls
+              </h3>
               
               {/* Season Filter */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-300 mb-3">
                   🌱 Season View
                 </label>
                 <select
                   value={selectedSeason}
                   onChange={(e) => setSelectedSeason(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                  className="w-full p-3 bg-gray-800 border border-gray-600 rounded-xl text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 hover:border-gray-500"
                 >
                   <option value="All">All Seasons</option>
-                  <option value="Winter">Winter</option>
-                  <option value="Spring">Spring</option>
-                  <option value="Summer">Summer</option>
-                  <option value="Autumn">Autumn</option>
+                  <option value="Winter">❄️ Winter</option>
+                  <option value="Spring">🌸 Spring</option>
+                  <option value="Summer">☀️ Summer</option>
+                  <option value="Autumn">🍂 Autumn</option>
                 </select>
               </div>
 
               {/* Date Filter */}
-              <div className="mb-4">
-                <label className="flex items-center mb-2">
+              <div className="mb-6">
+                <label className="flex items-center mb-3 group cursor-pointer">
                   <input
                     type="checkbox"
                     checked={showDateFilter}
                     onChange={(e) => setShowDateFilter(e.target.checked)}
-                    className="mr-2"
+                    className="mr-3 w-4 h-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500/20"
                   />
-                  <span className="text-sm font-medium text-gray-700">📅 Enable Date Filter</span>
+                  <span className="text-sm font-semibold text-gray-300 group-hover:text-white transition-colors">📅 Enable Date Filter</span>
                 </label>
                 
                 {showDateFilter && (
-                  <div className="space-y-2">
+                  <div className="space-y-3 animate-fade-in">
                     <input
                       type="date"
                       value={dateRange.start}
                       onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
-                      className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                      className="w-full p-3 bg-gray-800 border border-gray-600 rounded-xl text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                     />
                     <input
                       type="date"
                       value={dateRange.end}
                       onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
-                      className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                      className="w-full p-3 bg-gray-800 border border-gray-600 rounded-xl text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                     />
                   </div>
                 )}
@@ -351,53 +389,68 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
             </div>
 
             {/* Upcoming Festivals */}
-            <div className="bg-white rounded-lg shadow p-4">
-              <h3 className="font-semibold text-gray-900 mb-4">🎉 Upcoming Festivals</h3>
+            <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-700 rounded-2xl p-6 shadow-xl">
+              <h3 className="font-bold text-white mb-6 flex items-center text-lg">
+                <span className="w-6 h-6 bg-gradient-to-br from-orange-500 to-pink-600 rounded-lg mr-3 flex items-center justify-center text-xs">🎉</span>
+                Upcoming Festivals
+              </h3>
               {upcomingFestivals.length > 0 ? (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {upcomingFestivals.slice(0, 3).map((festival, index) => {
-                    const urgencyColor = festival.days_until <= 7 ? 'bg-red-100 text-red-800' : 
-                                       festival.days_until <= 15 ? 'bg-yellow-100 text-yellow-800' : 
-                                       'bg-green-100 text-green-800';
+                    const urgencyColor = festival.days_until <= 7 ? 'from-red-500 to-red-600' : 
+                                       festival.days_until <= 15 ? 'from-yellow-500 to-orange-500' : 
+                                       'from-green-500 to-green-600';
                     const urgencyIcon = festival.days_until <= 7 ? '🔴' : 
                                       festival.days_until <= 15 ? '🟡' : '🟢';
                     
                     return (
-                      <div key={index} className={`p-2 rounded text-xs ${urgencyColor}`}>
-                        <div className="font-medium">
-                          {urgencyIcon} {festival.name}
+                      <div key={index} className="group p-3 bg-gray-800/50 hover:bg-gray-800/70 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-200">
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="font-semibold text-white text-sm flex items-center">
+                            <span className="mr-2">{urgencyIcon}</span>
+                            {festival.name}
+                          </div>
+                          <span className={`px-2 py-1 bg-gradient-to-r ${urgencyColor} text-white text-xs font-medium rounded-full`}>
+                            {festival.days_until}d
+                          </span>
                         </div>
-                        <div>in {festival.days_until} days</div>
+                        <div className="text-xs text-gray-400">
+                          Focus on key items
+                        </div>
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <p className="text-sm text-gray-600">No festivals in next 30 days</p>
+                <div className="text-center py-6">
+                  <div className="text-2xl mb-2 opacity-50">🗓️</div>
+                  <p className="text-sm text-gray-400">No festivals in next 30 days</p>
+                </div>
               )}
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 animate-fade-in">
             {/* Tabs */}
-            <div className="mb-6">
-              <div className="border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8">
+            <div className="mb-8">
+              <div className="bg-gray-900/30 backdrop-blur-sm border border-gray-700 rounded-2xl p-2">
+                <nav className="flex space-x-2">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm ${
+                        className={`flex items-center px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
                           activeTab === tab.id
-                            ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                            : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
                         }`}
                       >
                         <Icon className="mr-2 h-4 w-4" />
-                        {tab.label}
+                        <span className="hidden sm:inline">{tab.label}</span>
+                        <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                       </button>
                     );
                   })}
@@ -406,39 +459,41 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
             </div>
 
             {/* Tab Content */}
-            {activeTab === 'dashboard' && (
-              <DashboardTab 
-                data={filteredData} 
-                keyMetrics={keyMetrics}
-                restockPredictions={restockPredictions}
-              />
-            )}
-            {activeTab === 'recommendations' && (
-              <RecommendationsTab 
-                recommendations={recommendations}
-                weatherInfo={weatherInfo}
-                data={data}
-              />
-            )}
-            {activeTab === 'predictions' && (
-              <PredictionsTab 
-                restockPredictions={restockPredictions}
-                data={filteredData}
-              />
-            )}
-            {activeTab === 'analytics' && (
-              <AnalyticsTab 
-                data={filteredData}
-              />
-            )}
-            {activeTab === 'export' && (
-              <ExportTab 
-                data={data}
-                recommendations={recommendations}
-                restockPredictions={restockPredictions}
-                keyMetrics={keyMetrics}
-              />
-            )}
+            <div className="animate-fade-in">
+              {activeTab === 'dashboard' && (
+                <DashboardTab 
+                  data={filteredData} 
+                  keyMetrics={keyMetrics}
+                  restockPredictions={restockPredictions}
+                />
+              )}
+              {activeTab === 'recommendations' && (
+                <RecommendationsTab 
+                  recommendations={recommendations}
+                  weatherInfo={weatherInfo}
+                  data={data}
+                />
+              )}
+              {activeTab === 'predictions' && (
+                <PredictionsTab 
+                  restockPredictions={restockPredictions}
+                  data={filteredData}
+                />
+              )}
+              {activeTab === 'analytics' && (
+                <AnalyticsTab 
+                  data={filteredData}
+                />
+              )}
+              {activeTab === 'export' && (
+                <ExportTab 
+                  data={data}
+                  recommendations={recommendations}
+                  restockPredictions={restockPredictions}
+                  keyMetrics={keyMetrics}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

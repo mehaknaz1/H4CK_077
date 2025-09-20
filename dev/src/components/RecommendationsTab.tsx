@@ -16,10 +16,10 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
   data 
 }) => {
   const urgencyColors = {
-    Critical: 'bg-red-50 border-red-200 text-red-800',
-    High: 'bg-orange-50 border-orange-200 text-orange-800',
-    Medium: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-    Low: 'bg-green-50 border-green-200 text-green-800'
+    Critical: 'bg-red-500/20 border-red-500/30 text-red-200',
+    High: 'bg-orange-500/20 border-orange-500/30 text-orange-200',
+    Medium: 'bg-yellow-500/20 border-yellow-500/30 text-yellow-200',
+    Low: 'bg-green-500/20 border-green-500/30 text-green-200'
   };
 
   const urgencyIcons = {
@@ -35,91 +35,94 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
   );
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          🎯 AI-Powered Smart Recommendations
+    <div className="space-y-8">
+      <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+        <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
+          <span className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mr-4 flex items-center justify-center text-lg">🎯</span>
+          AI-Powered Smart Recommendations
         </h2>
 
         {recommendations.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {recommendations.map((rec, index) => (
-              <div key={index} className={`border rounded-lg p-4 ${urgencyColors[rec.urgency]}`}>
-                <div className="flex items-start justify-between mb-3">
+              <div key={index} className={`border rounded-2xl p-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${urgencyColors[rec.urgency]}`}>
+                <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center">
-                    <span className="text-2xl mr-2">{urgencyIcons[rec.urgency]}</span>
+                    <span className="text-3xl mr-4">{urgencyIcons[rec.urgency]}</span>
                     <div>
-                      <h3 className="text-lg font-semibold">{rec.title}</h3>
-                      <span className="text-sm font-medium">{rec.urgency} Priority</span>
+                      <h3 className="text-xl font-bold text-white">{rec.title}</h3>
+                      <span className="text-sm font-semibold px-3 py-1 bg-white/20 rounded-full mt-2 inline-block">
+                        {rec.urgency} Priority
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center text-sm">
-                    {rec.type === 'Festival' && <Calendar className="h-4 w-4 mr-1" />}
-                    {rec.type === 'Weather' && <Sun className="h-4 w-4 mr-1" />}
-                    {rec.type === 'Urgent' && <AlertTriangle className="h-4 w-4 mr-1" />}
-                    {rec.type === 'Historical' && <TrendingUp className="h-4 w-4 mr-1" />}
-                    {rec.type}
+                  <div className="flex items-center text-sm bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm">
+                    {rec.type === 'Festival' && <Calendar className="h-4 w-4 mr-2" />}
+                    {rec.type === 'Weather' && <Sun className="h-4 w-4 mr-2" />}
+                    {rec.type === 'Urgent' && <AlertTriangle className="h-4 w-4 mr-2" />}
+                    {rec.type === 'Historical' && <TrendingUp className="h-4 w-4 mr-2" />}
+                    <span className="font-medium">{rec.type}</span>
                   </div>
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-4">
                   <div 
-                    className="prose prose-sm max-w-none"
+                    className="prose prose-sm max-w-none text-gray-200 leading-relaxed"
                     dangerouslySetInnerHTML={{ 
-                      __html: rec.reason.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                      __html: rec.reason.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') 
                     }}
                   />
                 </div>
 
                 {rec.type === 'Festival' && (
-                  <div className="bg-blue-50 p-3 rounded border">
-                    <div className="flex items-center text-blue-800">
-                      <Lightbulb className="h-4 w-4 mr-2" />
-                      <span className="text-sm font-medium">Pro Tip:</span>
+                  <div className="bg-blue-500/20 border border-blue-500/30 p-4 rounded-xl backdrop-blur-sm">
+                    <div className="flex items-center text-blue-200 mb-2">
+                      <Lightbulb className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Pro Tip:</span>
                     </div>
-                    <p className="text-sm text-blue-700 mt-1">
+                    <p className="text-sm text-blue-100">
                       Festival periods typically see 50-100% increase in demand for related products!
                     </p>
                   </div>
                 )}
 
                 {rec.type === 'Weather' && (
-                  <div className="bg-blue-50 p-3 rounded border">
-                    <div className="flex items-center text-blue-800">
-                      <Sun className="h-4 w-4 mr-2" />
-                      <span className="text-sm font-medium">Weather Insight:</span>
+                  <div className="bg-cyan-500/20 border border-cyan-500/30 p-4 rounded-xl backdrop-blur-sm">
+                    <div className="flex items-center text-cyan-200 mb-2">
+                      <Sun className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Weather Insight:</span>
                     </div>
-                    <p className="text-sm text-blue-700 mt-1">
+                    <p className="text-sm text-cyan-100">
                       Stock weather-appropriate products 1-2 weeks before seasonal changes.
                     </p>
                   </div>
                 )}
 
                 {rec.type === 'Historical' && (
-                  <div className="bg-blue-50 p-3 rounded border">
-                    <div className="flex items-center text-blue-800">
-                      <TrendingUp className="h-4 w-4 mr-2" />
-                      <span className="text-sm font-medium">Historical Pattern:</span>
+                  <div className="bg-purple-500/20 border border-purple-500/30 p-4 rounded-xl backdrop-blur-sm">
+                    <div className="flex items-center text-purple-200 mb-2">
+                      <TrendingUp className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Historical Pattern:</span>
                     </div>
-                    <p className="text-sm text-blue-700 mt-1">
+                    <p className="text-sm text-purple-100">
                       Past performance is a good indicator of future demand.
                     </p>
                   </div>
                 )}
 
-                <div className="mt-3 pt-3 border-t border-gray-200">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Affected Products:</p>
+                <div className="mt-4 pt-4 border-t border-white/20">
+                  <p className="text-sm font-semibold text-gray-300 mb-3">Affected Products:</p>
                   <div className="flex flex-wrap gap-2">
                     {rec.products.slice(0, 5).map((product, idx) => (
                       <span 
                         key={idx}
-                        className="px-2 py-1 bg-white rounded text-xs font-medium border"
+                        className="px-3 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-xs font-medium border border-white/20 hover:bg-white/20 transition-colors"
                       >
                         {product}
                       </span>
                     ))}
                     {rec.products.length > 5 && (
-                      <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-600">
+                      <span className="px-3 py-2 bg-gray-700/50 rounded-xl text-xs text-gray-300 border border-gray-600">
                         +{rec.products.length - 5} more
                       </span>
                     )}
@@ -129,20 +132,20 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <div className="text-center py-16">
+            <div className="text-8xl mb-6">🎉</div>
+            <h3 className="text-2xl font-bold text-white mb-4">
               Great news! Your inventory levels look well-balanced.
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-300 mb-6 text-lg max-w-2xl mx-auto">
               All products appear to have adequate stock levels across categories.
             </p>
-            <div className="bg-blue-50 p-4 rounded-lg max-w-md mx-auto">
-              <div className="flex items-center text-blue-800 mb-2">
-                <Lightbulb className="h-4 w-4 mr-2" />
-                <span className="font-medium">Pro Tip:</span>
+            <div className="bg-blue-500/20 border border-blue-500/30 p-6 rounded-2xl max-w-md mx-auto backdrop-blur-sm">
+              <div className="flex items-center text-blue-200 mb-3">
+                <Lightbulb className="h-5 w-5 mr-2" />
+                <span className="font-semibold">Pro Tip:</span>
               </div>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-blue-100">
                 Keep monitoring daily sales trends and upcoming festivals for proactive planning.
               </p>
             </div>
@@ -151,23 +154,24 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
       </div>
 
       {/* Weather Impact Analysis */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          🌤 Current Weather Impact Analysis
+      <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+          <span className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl mr-3 flex items-center justify-center text-sm">🌤</span>
+          Current Weather Impact Analysis
         </h3>
         
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-blue-50 p-4 rounded-lg border">
-            <h4 className="font-semibold text-blue-900 mb-2">Current Season Forecast</h4>
-            <p className="text-blue-800">{weatherInfo.forecast}</p>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-blue-500/20 border border-blue-500/30 p-6 rounded-2xl backdrop-blur-sm">
+            <h4 className="font-bold text-blue-200 mb-3 text-lg">Current Season Forecast</h4>
+            <p className="text-blue-100 text-lg">{weatherInfo.forecast}</p>
           </div>
 
-          <div className="bg-green-50 p-4 rounded-lg border">
-            <h4 className="font-semibold text-green-900 mb-2">
+          <div className="bg-green-500/20 border border-green-500/30 p-6 rounded-2xl backdrop-blur-sm">
+            <h4 className="font-bold text-green-200 mb-3 text-lg">
               Weather-suitable products in inventory
             </h4>
             {weatherMatches.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {weatherMatches.slice(0, 5).map((product, index) => {
                   const productData = data.filter(item => item.Product === product);
                   const currentStock = productData.length > 0 
@@ -175,20 +179,25 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
                     : 0;
                   
                   return (
-                    <div key={index} className="flex justify-between items-center text-sm">
-                      <span className="text-green-800">☀ <strong>{product}</strong></span>
-                      <span className="text-green-700">Stock: {currentStock}</span>
+                    <div key={index} className="flex justify-between items-center text-sm bg-white/10 p-3 rounded-xl backdrop-blur-sm">
+                      <span className="text-green-100 font-semibold flex items-center">
+                        <span className="mr-2">☀</span> 
+                        {product}
+                      </span>
+                      <span className="text-green-200 bg-green-400/20 px-3 py-1 rounded-full font-medium">
+                        Stock: {currentStock}
+                      </span>
                     </div>
                   );
                 })}
                 {weatherMatches.length > 5 && (
-                  <p className="text-sm text-green-700 pt-2 border-t border-green-200">
+                  <p className="text-sm text-green-100 pt-3 border-t border-green-400/30">
                     +{weatherMatches.length - 5} more weather-suitable products
                   </p>
                 )}
               </div>
             ) : (
-              <p className="text-green-700 text-sm">
+              <p className="text-green-100 text-sm">
                 No weather-specific products identified in current inventory
               </p>
             )}
@@ -198,32 +207,36 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
 
       {/* Recommendation Summary */}
       {recommendations.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            📊 Recommendation Summary
+        <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <span className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl mr-3 flex items-center justify-center text-sm">📊</span>
+            Recommendation Summary
           </h3>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             {Object.entries(urgencyColors).map(([urgency, colorClass]) => {
               const count = recommendations.filter(r => r.urgency === urgency).length;
               return (
-                <div key={urgency} className={`p-4 rounded-lg border ${colorClass}`}>
+                <div key={urgency} className={`p-6 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 ${colorClass}`}>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{count}</div>
-                    <div className="text-sm font-medium">{urgency} Priority</div>
+                    <div className="text-3xl font-bold mb-2">{count}</div>
+                    <div className="text-sm font-semibold">{urgency} Priority</div>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-6 grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-6">
             {['Festival', 'Weather', 'Urgent'].map(type => {
               const count = recommendations.filter(r => r.type === type).length;
+              const bgColor = type === 'Festival' ? 'bg-orange-500/20 border-orange-500/30' :
+                             type === 'Weather' ? 'bg-cyan-500/20 border-cyan-500/30' :
+                             'bg-red-500/20 border-red-500/30';
               return (
-                <div key={type} className="bg-gray-50 p-4 rounded-lg text-center">
-                  <div className="text-xl font-bold text-gray-900">{count}</div>
-                  <div className="text-sm text-gray-600">{type} Recommendations</div>
+                <div key={type} className={`${bgColor} border p-6 rounded-2xl text-center backdrop-blur-sm transition-all duration-300 hover:scale-105`}>
+                  <div className="text-2xl font-bold text-white mb-2">{count}</div>
+                  <div className="text-sm text-gray-200 font-medium">{type} Recommendations</div>
                 </div>
               );
             })}
