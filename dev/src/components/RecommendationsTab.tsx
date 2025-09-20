@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, Lightbulb, Sun, Calendar, TrendingUp } from 'lucide-react';
+import { AlertTriangle, Lightbulb, Sun, Calendar, TrendingUp, AlertCircle, Info, CheckCircle, Target } from 'lucide-react';
 import { Recommendation, WeatherInfo, ProcessedInventoryData } from '@/types/inventory';
 import { findMatchingProducts } from '@/utils/inventoryAnalytics';
 
@@ -23,10 +23,10 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
   };
 
   const urgencyIcons = {
-    Critical: '🚨',
-    High: '🔴',
-    Medium: '🟡',
-    Low: '🟢'
+    Critical: <AlertTriangle className="h-5 w-5" />,
+    High: <AlertCircle className="h-5 w-5" />,
+    Medium: <Info className="h-5 w-5" />,
+    Low: <CheckCircle className="h-5 w-5" />
   };
 
   const weatherMatches = findMatchingProducts(
@@ -38,7 +38,9 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
     <div className="space-y-8">
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
-          <span className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mr-4 flex items-center justify-center text-lg">🎯</span>
+          <span className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mr-4 flex items-center justify-center text-lg">
+            <Target className="h-5 w-5 text-white" />
+          </span>
           AI-Powered Smart Recommendations
         </h2>
 
@@ -48,7 +50,19 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
               <div key={index} className={`border rounded-2xl p-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${urgencyColors[rec.urgency]}`}>
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center">
-                    <span className="text-3xl mr-4">{urgencyIcons[rec.urgency]}</span>
+                    <div className={`w-10 h-10 rounded-full mr-4 flex items-center justify-center ${
+                      rec.urgency === 'Critical' ? 'bg-red-500/30' :
+                      rec.urgency === 'High' ? 'bg-orange-500/30' :
+                      rec.urgency === 'Medium' ? 'bg-yellow-500/30' : 'bg-green-500/30'
+                    }`}>
+                      <span className={`${
+                        rec.urgency === 'Critical' ? 'text-red-300' :
+                        rec.urgency === 'High' ? 'text-orange-300' :
+                        rec.urgency === 'Medium' ? 'text-yellow-300' : 'text-green-300'
+                      }`}>
+                        {urgencyIcons[rec.urgency]}
+                      </span>
+                    </div>
                     <div>
                       <h3 className="text-xl font-bold text-white">{rec.title}</h3>
                       <span className="text-sm font-semibold px-3 py-1 bg-white/20 rounded-full mt-2 inline-block">
@@ -66,12 +80,95 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
                 </div>
 
                 <div className="mb-4">
-                  <div 
-                    className="prose prose-sm max-w-none text-gray-200 leading-relaxed"
-                    dangerouslySetInnerHTML={{ 
-                      __html: rec.reason.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') 
-                    }}
-                  />
+                  {rec.type === 'Urgent' && rec.reason.includes('URGENT STOCK ALERTS') ? (
+                    <div className="space-y-4">
+                      <h4 className="text-lg font-semibold text-white mb-3">Critical Stock Alerts</h4>
+                      <div className="space-y-3">
+                        {rec.reason
+                          .split('•')
+                          .filter(alert => alert.trim() && !alert.includes('🚨 URGENT STOCK ALERTS'))
+                          .map((alert, idx) => {
+                            const trimmedAlert = alert.trim();
+                            const isOutOfStock = trimmedAlert.includes('OUT OF STOCK');
+                            
+                            // Extract product name (everything before the first colon)
+                            const productMatch = trimmedAlert.match(/^([^:]+):/);
+                            const productName = productMatch ? productMatch[1].trim() : trimmedAlert;
+                            
+                            // Extract days left info
+                            const daysMatch = trimmedAlert.match(/Only ([\d.]+) days left/);
+                            const daysLeft = daysMatch ? parseFloat(daysMatch[1]) : null;
+                            
+                            // Extract daily sales info
+                            const salesMatch = trimmedAlert.match(/Average daily sales: ([\d.,]+) units/);
+                            const dailySales = salesMatch ? salesMatch[1] : null;
+                            
+                            return (
+                              <div 
+                                key={idx}
+                                className={`p-4 rounded-xl border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${
+                                  isOutOfStock 
+                                    ? 'bg-red-500/20 border-red-500/40 text-red-100' 
+                                    : 'bg-orange-500/20 border-orange-500/40 text-orange-100'
+                                }`}
+                              >
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <div className="flex items-center mb-2">
+                                      {isOutOfStock ? (
+                                        <AlertTriangle className="h-5 w-5 text-red-400 mr-2" />
+                                      ) : (
+                                        <AlertCircle className="h-5 w-5 text-orange-400 mr-2" />
+                                      )}
+                                      <h5 className="font-bold text-white text-lg">{productName}</h5>
+                                    </div>
+                                    
+                                    <div className="space-y-2">
+                                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${
+                                        isOutOfStock 
+                                          ? 'bg-red-600/30 text-red-200' 
+                                          : 'bg-orange-600/30 text-orange-200'
+                                      }`}>
+                                        {isOutOfStock ? 'OUT OF STOCK' : 'LOW STOCK'}
+                                      </div>
+                                      
+                                      {daysLeft !== null && !isOutOfStock && (
+                                        <div className="text-sm">
+                                          <span className="font-medium">Days remaining: </span>
+                                          <span className={`font-bold ${daysLeft <= 1 ? 'text-red-300' : 'text-orange-300'}`}>
+                                            {daysLeft} days
+                                          </span>
+                                        </div>
+                                      )}
+                                      
+                                      {dailySales && (
+                                        <div className="text-sm">
+                                          <span className="font-medium">Daily sales: </span>
+                                          <span className="font-bold text-white">{dailySales} units</span>
+                                        </div>
+                                      )}
+                                      
+                                      {isOutOfStock && (
+                                        <div className="text-sm font-medium text-red-300">
+                                          ⚠️ Restock immediately!
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      className="prose prose-sm max-w-none text-gray-200 leading-relaxed"
+                      dangerouslySetInnerHTML={{ 
+                        __html: rec.reason.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') 
+                      }}
+                    />
+                  )}
                 </div>
 
                 {rec.type === 'Festival' && (
@@ -112,28 +209,49 @@ const RecommendationsTab: React.FC<RecommendationsTabProps> = ({
 
                 <div className="mt-4 pt-4 border-t border-white/20">
                   <p className="text-sm font-semibold text-gray-300 mb-3">Affected Products:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {rec.products.slice(0, 5).map((product, idx) => (
-                      <span 
-                        key={idx}
-                        className="px-3 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-xs font-medium border border-white/20 hover:bg-white/20 transition-colors"
-                      >
-                        {product}
-                      </span>
-                    ))}
-                    {rec.products.length > 5 && (
-                      <span className="px-3 py-2 bg-gray-700/50 rounded-xl text-xs text-gray-300 border border-gray-600">
-                        +{rec.products.length - 5} more
-                      </span>
-                    )}
-                  </div>
+                  {rec.type === 'Urgent' && rec.products.length > 10 ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                      {rec.products.slice(0, 12).map((product, idx) => (
+                        <span 
+                          key={idx}
+                          className="px-3 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-xs font-medium border border-white/20 hover:bg-white/20 transition-colors truncate"
+                          title={product}
+                        >
+                          {product}
+                        </span>
+                      ))}
+                      {rec.products.length > 12 && (
+                        <span className="px-3 py-2 bg-gray-700/50 rounded-xl text-xs text-gray-300 border border-gray-600 text-center">
+                          +{rec.products.length - 12} more
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {rec.products.slice(0, 5).map((product, idx) => (
+                        <span 
+                          key={idx}
+                          className="px-3 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-xs font-medium border border-white/20 hover:bg-white/20 transition-colors"
+                        >
+                          {product}
+                        </span>
+                      ))}
+                      {rec.products.length > 5 && (
+                        <span className="px-3 py-2 bg-gray-700/50 rounded-xl text-xs text-gray-300 border border-gray-600">
+                          +{rec.products.length - 5} more
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-16">
-            <div className="text-8xl mb-6">🎉</div>
+            <div className="w-20 h-20 mx-auto mb-6 bg-green-500/20 rounded-full flex items-center justify-center">
+              <CheckCircle className="h-10 w-10 text-green-400" />
+            </div>
             <h3 className="text-2xl font-bold text-white mb-4">
               Great news! Your inventory levels look well-balanced.
             </h3>

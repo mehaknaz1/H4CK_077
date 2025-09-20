@@ -141,7 +141,9 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-white flex items-center">
-            <span className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl mr-4 flex items-center justify-center text-lg">📊</span>
+            <span className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl mr-4 flex items-center justify-center text-lg">
+              <BarChart3 className="h-5 w-5 text-white" />
+            </span>
             Advanced Business Intelligence
           </h2>
           
@@ -163,7 +165,9 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
         {/* Performance Analysis Table */}
         <div className="mb-8">
           <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <span className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">⚡</span>
+            <span className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+              <Activity className="h-4 w-4 text-white" />
+            </span>
             Product Performance Analysis
           </h3>
           <div className="overflow-x-auto bg-gray-800/30 rounded-2xl border border-gray-700">
@@ -239,7 +243,9 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
         {/* Stock vs Sales Scatter Plot */}
         <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-            <span className="w-6 h-6 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">📈</span>
+            <span className="w-6 h-6 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">
+              <TrendingUp className="h-3 w-3 text-white" />
+            </span>
             Stock vs Sales Performance
           </h3>
           <ResponsiveContainer width="100%" height={350}>
@@ -287,7 +293,9 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
         {/* Category Performance */}
         <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-            <span className="w-6 h-6 bg-gradient-to-br from-violet-500 to-purple-500 rounded-lg mr-3 flex items-center justify-center text-xs">📊</span>
+            <span className="w-6 h-6 bg-gradient-to-br from-violet-500 to-purple-500 rounded-lg mr-3 flex items-center justify-center text-xs">
+              <BarChart3 className="h-3 w-3 text-white" />
+            </span>
             Total Sales by Category
           </h3>
           <ResponsiveContainer width="100%" height={350}>
@@ -325,7 +333,9 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
       {/* Category Insights */}
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-          <span className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl mr-3 flex items-center justify-center text-sm">🎯</span>
+          <span className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+            <Target className="h-4 w-4 text-white" />
+          </span>
           Category Performance Insights
         </h3>
         
@@ -358,7 +368,9 @@ const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ data }) => {
       {/* Summary Statistics */}
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-          <span className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl mr-3 flex items-center justify-center text-sm">📈</span>
+          <span className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+            <TrendingUp className="h-4 w-4 text-white" />
+          </span>
           Performance Summary
         </h3>
         

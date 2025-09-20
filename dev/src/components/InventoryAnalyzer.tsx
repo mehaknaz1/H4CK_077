@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Upload, FileText, TrendingUp, Target, BarChart3, Download } from 'lucide-react';
+import { Upload, FileText, TrendingUp, Target, BarChart3, Download, Calendar } from 'lucide-react';
 import Papa from 'papaparse';
 import { 
   InventoryData, 
@@ -140,7 +140,7 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 animate-fade-in">
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-4">
-              🎯 Smart Inventory Analyzer
+              Smart Inventory Analyzer
             </h1>
             <p className="text-xl text-gray-300 font-medium">AI-Powered Inventory Intelligence</p>
             <div className="mt-4 inline-flex items-center px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-sm text-gray-300 backdrop-blur-sm">
@@ -200,7 +200,9 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
             {/* Features */}
             <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
               <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <span className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg mr-3 flex items-center justify-center text-sm">🚀</span>
+                <span className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg mr-3 flex items-center justify-center text-sm">
+                  <Target className="h-4 w-4 text-white" />
+                </span>
                 Key Features
               </h3>
               <ul className="space-y-4">
@@ -208,11 +210,13 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
                   { icon: "🎉", title: "Festival Intelligence", desc: "Personalized alerts for Indian festivals" },
                   { icon: "🌤", title: "Weather Recommendations", desc: "Smart seasonal suggestions" },
                   { icon: "🤖", title: "AI-Powered Insights", desc: "Realistic buying recommendations" },
-                  { icon: "📊", title: "Interactive Dashboards", desc: "Real-time analytics" },
-                  { icon: "🔮", title: "Predictive Analytics", desc: "Accurate restock predictions" }
+                  { icon: <BarChart3 className="h-4 w-4" />, title: "Interactive Dashboards", desc: "Real-time analytics" },
+                  { icon: <TrendingUp className="h-4 w-4" />, title: "Predictive Analytics", desc: "Accurate restock predictions" }
                 ].map((feature, index) => (
                   <li key={index} className="flex items-start group">
-                    <span className="text-2xl mr-4 group-hover:scale-110 transition-transform duration-200">{feature.icon}</span>
+                    <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-200">
+                      <span className="text-blue-400">{feature.icon}</span>
+                    </div>
                     <div>
                       <div className="text-white font-semibold group-hover:text-blue-400 transition-colors">
                         {feature.title}
@@ -227,7 +231,9 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
             {/* Upcoming Festivals */}
             <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
               <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <span className="w-8 h-8 bg-gradient-to-br from-orange-400 to-pink-500 rounded-lg mr-3 flex items-center justify-center text-sm">🎉</span>
+                <span className="w-8 h-8 bg-gradient-to-br from-orange-400 to-pink-500 rounded-lg mr-3 flex items-center justify-center text-sm">
+                  <Calendar className="h-4 w-4 text-white" />
+                </span>
                 Upcoming Festivals
               </h3>
               {upcomingFestivals.length > 0 ? (
@@ -235,14 +241,17 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
                   {upcomingFestivals.slice(0, 5).map((festival, index) => {
                     const urgencyColor = festival.days_until <= 7 ? 'from-red-500 to-red-600' : 
                                        festival.days_until <= 15 ? 'from-yellow-500 to-orange-500' : 'from-green-500 to-green-600';
-                    const urgencyIcon = festival.days_until <= 7 ? '🔴' : 
-                                      festival.days_until <= 15 ? '🟡' : '🟢';
+                    const urgencyClass = festival.days_until <= 7 ? 'bg-red-500/20 border-red-500/30' : 
+                                      festival.days_until <= 15 ? 'bg-yellow-500/20 border-yellow-500/30' : 'bg-green-500/20 border-green-500/30';
                     
                     return (
                       <div key={index} className="group p-4 bg-gray-800/50 hover:bg-gray-800/70 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-200">
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-semibold text-white flex items-center">
-                            <span className="mr-2">{urgencyIcon}</span>
+                            <span className={`w-3 h-3 rounded-full mr-3 ${
+                              festival.days_until <= 7 ? 'bg-red-500' : 
+                              festival.days_until <= 15 ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}></span>
                             {festival.name}
                           </span>
                           <span className={`px-3 py-1 bg-gradient-to-r ${urgencyColor} text-white text-sm font-medium rounded-full`}>
@@ -250,7 +259,7 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
                           </span>
                         </div>
                         <p className="text-gray-400 text-sm">
-                          📦 Focus on: <span className="text-gray-300">{festival.products.slice(0, 4).join(', ')}...</span>
+                          Focus on: <span className="text-gray-300">{festival.products.slice(0, 4).join(', ')}...</span>
                         </p>
                       </div>
                     );
@@ -258,7 +267,9 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <div className="text-4xl mb-4 opacity-50">🗓️</div>
+                  <div className="w-12 h-12 mx-auto mb-4 bg-gray-700/50 rounded-full flex items-center justify-center opacity-50">
+                    <Calendar className="h-6 w-6 text-gray-500" />
+                  </div>
                   <p className="text-gray-400">No major festivals in the next 30 days</p>
                 </div>
               )}
@@ -310,7 +321,7 @@ const InventoryAnalyzer: React.FC<InventoryAnalyzerProps> = () => {
           <div className="flex justify-between items-center py-6">
             <div className="animate-slide-in">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                🎯 Smart Inventory Analyzer
+                Smart Inventory Analyzer
               </h1>
               <p className="text-gray-300 mt-1 font-medium">
                 AI-Powered Inventory Intelligence with Predictions

@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, AlertTriangle, TrendingDown } from 'lucide-react';
+import { Calendar, AlertTriangle, TrendingDown, TrendingUp, Activity, BarChart3, PieChart as PieChartIcon, Lightbulb } from 'lucide-react';
 import { RestockPrediction, ProcessedInventoryData } from '@/types/inventory';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -19,9 +19,9 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
     return (a.Days_Until_Restock || 999) - (b.Days_Until_Restock || 999);
   });
 
-  // Get critical items
+  // Get critical items (using current stock as primary indicator)
   const criticalItems = sortedPredictions.filter(item => 
-    item.Status?.includes('🚨') || item.Status?.includes('🔴')
+    item.Current_Stock <= 0 || (item.Status?.includes('🚨') || item.Status?.includes('🔴'))
   );
 
   // Prepare chart data for days of stock remaining
@@ -33,13 +33,13 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
       status: item.Status || ''
     }));
 
-  // Urgency distribution data
+  // Urgency distribution data - using more robust classification
   const urgencyStats = {
-    'Out of Stock': sortedPredictions.filter(p => p.Status?.includes('🚨')).length,
-    'Critical': sortedPredictions.filter(p => p.Status?.includes('🔴')).length,
-    'Low': sortedPredictions.filter(p => p.Status?.includes('🟠')).length,
-    'Moderate': sortedPredictions.filter(p => p.Status?.includes('🟡')).length,
-    'Good': sortedPredictions.filter(p => p.Status?.includes('🟢')).length,
+    'Out of Stock': sortedPredictions.filter(p => p.Current_Stock <= 0).length,
+    'Critical': sortedPredictions.filter(p => p.Current_Stock > 0 && p.Current_Stock <= p.Avg_Daily_Sales * 2).length,
+    'Low': sortedPredictions.filter(p => p.Current_Stock > p.Avg_Daily_Sales * 2 && p.Current_Stock <= p.Avg_Daily_Sales * 5).length,
+    'Moderate': sortedPredictions.filter(p => p.Current_Stock > p.Avg_Daily_Sales * 5 && p.Current_Stock <= p.Avg_Daily_Sales * 10).length,
+    'Good': sortedPredictions.filter(p => p.Current_Stock > p.Avg_Daily_Sales * 10).length,
   };
 
   const urgencyDistribution = Object.entries(urgencyStats).map(([key, value]) => ({
@@ -47,20 +47,29 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
     value
   })).filter(item => item.value > 0);
 
-  const getStatusColor = (status: string) => {
-    if (status.includes('🚨')) return 'bg-red-500/20 text-red-200 border-red-500/30';
-    if (status.includes('🔴')) return 'bg-red-500/20 text-red-200 border-red-500/30';
+  const getStatusColor = (status: string, currentStock: number, avgDailySales: number) => {
+    // Priority: use current stock levels over emoji status
+    if (currentStock <= 0) return 'bg-red-500/20 text-red-200 border-red-500/30';
+    if (currentStock <= avgDailySales * 2) return 'bg-red-500/20 text-red-200 border-red-500/30';
+    if (currentStock <= avgDailySales * 5) return 'bg-orange-500/20 text-orange-200 border-orange-500/30';
+    if (currentStock <= avgDailySales * 10) return 'bg-yellow-500/20 text-yellow-200 border-yellow-500/30';
+    
+    // Fallback to emoji checking for compatibility
+    if (status.includes('🚨') || status.includes('🔴')) return 'bg-red-500/20 text-red-200 border-red-500/30';
     if (status.includes('🟠')) return 'bg-orange-500/20 text-orange-200 border-orange-500/30';
     if (status.includes('🟡')) return 'bg-yellow-500/20 text-yellow-200 border-yellow-500/30';
     if (status.includes('🟢')) return 'bg-green-500/20 text-green-200 border-green-500/30';
-    return 'bg-gray-500/20 text-gray-200 border-gray-500/30';
+    
+    return 'bg-green-500/20 text-green-200 border-green-500/30';
   };
 
   return (
     <div className="space-y-8">
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
-          <span className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mr-4 flex items-center justify-center text-lg">🔮</span>
+          <span className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mr-4 flex items-center justify-center text-lg">
+            <TrendingUp className="h-5 w-5 text-white" />
+          </span>
           Advanced Predictive Analytics
         </h2>
 
@@ -89,7 +98,7 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
                   {criticalItems.map((item, index) => (
                     <tr key={index} className="border-b border-red-400/20">
                       <td className="py-3">
-                        <span className={`px-3 py-1 rounded-xl text-xs font-semibold border ${getStatusColor(item.Status || '')}`}>
+                        <span className={`px-3 py-1 rounded-xl text-xs font-semibold border ${getStatusColor(item.Status || '', item.Current_Stock, item.Avg_Daily_Sales)}`}>
                           {item.Status}
                         </span>
                       </td>
@@ -109,7 +118,9 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
         {/* Complete Restock Analysis */}
         <div className="mb-8">
           <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <span className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl mr-3 flex items-center justify-center text-sm">📋</span>
+            <span className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+              <Activity className="h-4 w-4 text-white" />
+            </span>
             Complete Restock Analysis
           </h3>
           <div className="overflow-x-auto bg-gray-800/30 rounded-2xl border border-gray-700">
@@ -143,7 +154,7 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
                 {sortedPredictions.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-800/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 rounded-xl text-xs font-semibold border ${getStatusColor(item.Status || '')}`}>
+                      <span className={`px-3 py-1 rounded-xl text-xs font-semibold border ${getStatusColor(item.Status || '', item.Current_Stock, item.Avg_Daily_Sales)}`}>
                         {item.Status}
                       </span>
                     </td>
@@ -180,7 +191,9 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
         {/* Days of Stock Remaining */}
         <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-            <span className="w-6 h-6 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg mr-3 flex items-center justify-center text-xs">📊</span>
+            <span className="w-6 h-6 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg mr-3 flex items-center justify-center text-xs">
+              <BarChart3 className="h-3 w-3 text-white" />
+            </span>
             Days of Stock Remaining (Top 10 Products)
           </h3>
           <ResponsiveContainer width="100%" height={320}>
@@ -221,7 +234,9 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
         {/* Stock Status Distribution */}
         <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-            <span className="w-6 h-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">🥧</span>
+            <span className="w-6 h-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">
+              <PieChartIcon className="h-3 w-3 text-white" />
+            </span>
             Stock Status Distribution
           </h3>
           <ResponsiveContainer width="100%" height={320}>
@@ -255,7 +270,9 @@ const PredictionsTab: React.FC<PredictionsTabProps> = ({ restockPredictions }) =
       {/* Insights and Tips */}
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-          <span className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">💡</span>
+          <span className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+            <Lightbulb className="h-4 w-4 text-white" />
+          </span>
           Predictive Insights & Tips
         </h3>
         

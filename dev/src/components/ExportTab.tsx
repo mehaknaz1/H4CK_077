@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, FileText, BarChart3, Calendar } from 'lucide-react';
+import { Download, FileText, BarChart3, Calendar, TrendingUp, BookOpen } from 'lucide-react';
 import { ProcessedInventoryData, Recommendation, RestockPrediction, KeyMetrics } from '@/types/inventory';
 import { exportToCSV } from '@/utils/inventoryAnalytics';
 
@@ -99,7 +99,9 @@ const ExportTab: React.FC<ExportTabProps> = ({
     <div className="space-y-8">
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h2 className="text-3xl font-bold text-white mb-8 flex items-center">
-          <span className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mr-4 flex items-center justify-center text-lg">💾</span>
+          <span className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mr-4 flex items-center justify-center text-lg">
+            <Download className="h-5 w-5 text-white" />
+          </span>
           Enhanced Data Export & Reports
         </h2>
 
@@ -109,7 +111,7 @@ const ExportTab: React.FC<ExportTabProps> = ({
             <div className="flex items-center mb-6">
               <BarChart3 className="h-6 w-6 text-blue-400 mr-3" />
               <h3 className="text-xl font-bold text-white">
-                📊 Enhanced Inventory Report
+                Enhanced Inventory Report
               </h3>
             </div>
             
@@ -146,7 +148,7 @@ const ExportTab: React.FC<ExportTabProps> = ({
             <div className="flex items-center mb-6">
               <FileText className="h-6 w-6 text-green-400 mr-3" />
               <h3 className="text-xl font-bold text-white">
-                🎯 Smart Recommendations Report
+                Smart Recommendations Report
               </h3>
             </div>
             
@@ -192,7 +194,7 @@ const ExportTab: React.FC<ExportTabProps> = ({
             <div className="flex items-center mb-6">
               <Calendar className="h-6 w-6 text-purple-400 mr-3" />
               <h3 className="text-xl font-bold text-white">
-                🔮 Restock Predictions Report
+                Restock Predictions Report
               </h3>
             </div>
             
@@ -235,7 +237,7 @@ const ExportTab: React.FC<ExportTabProps> = ({
             <div className="flex items-center mb-6">
               <FileText className="h-6 w-6 text-indigo-400 mr-3" />
               <h3 className="text-xl font-bold text-white">
-                📋 Executive Summary Report
+                Executive Summary Report
               </h3>
             </div>
             
@@ -274,7 +276,9 @@ const ExportTab: React.FC<ExportTabProps> = ({
       {/* Summary Statistics */}
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-          <span className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl mr-3 flex items-center justify-center text-sm">📈</span>
+          <span className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+            <TrendingUp className="h-4 w-4 text-white" />
+          </span>
           Export Summary Statistics
         </h3>
         
@@ -312,7 +316,9 @@ const ExportTab: React.FC<ExportTabProps> = ({
       {/* Export Instructions */}
       <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-2xl p-8 backdrop-blur-sm">
         <h3 className="text-xl font-bold text-blue-200 mb-6 flex items-center">
-          <span className="w-6 h-6 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg mr-3 flex items-center justify-center text-xs">📖</span>
+          <span className="w-6 h-6 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg mr-3 flex items-center justify-center text-xs">
+            <BookOpen className="h-3 w-3 text-white" />
+          </span>
           Export Instructions
         </h3>
         <div className="text-sm text-blue-100 space-y-3">

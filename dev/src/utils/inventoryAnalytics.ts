@@ -262,13 +262,13 @@ export function generateSmartRecommendations(
       if (festivalAdvice.length > 0) {
         const urgency = festival.days_until <= 3 ? 'High' : festival.days_until <= 7 ? 'Medium' : 'Low';
         
-        let recText = `🎉 **${festival.name}** is coming in **${festival.days_until} days**!\n\n`;
+        let recText = `🎉 ${festival.name} is coming in ${festival.days_until} days!\n\n`;
         
         festivalAdvice.forEach(advice => {
-          recText += `• **${advice.product}**: Current stock ${Math.round(advice.current_stock)} units\n`;
+          recText += `• ${advice.product}: Current stock ${Math.round(advice.current_stock)} units\n`;
           recText += `  - Average daily sales: ${advice.avg_sales.toFixed(1)} units\n`;
           recText += `  - Recommended stock: ${Math.round(advice.recommended)} units\n`;
-          recText += `  - **BUY ${Math.round(advice.shortage)} more units** for festival demand!\n\n`;
+          recText += `  - BUY ${Math.round(advice.shortage)} more units for festival demand!\n\n`;
         });
         
         recommendations.push({
@@ -320,12 +320,12 @@ export function generateSmartRecommendations(
     });
     
     if (weatherAdvice.length > 0) {
-      let recText = `🌤 **${weatherInfo.forecast}**\n\n`;
+      let recText = `🌤 ${weatherInfo.forecast}\n\n`;
       
       weatherAdvice.forEach(advice => {
-        recText += `• **${advice.product}**: Stock up for ${weatherInfo.condition} weather\n`;
+        recText += `• ${advice.product}: Stock up for ${weatherInfo.condition} weather\n`;
         recText += `  - Current stock: ${Math.round(advice.current_stock)} units\n`;
-        recText += `  - **Increase by ${Math.round(advice.shortage)} units** for weather demand\n\n`;
+        recText += `  - Increase by ${Math.round(advice.shortage)} units for weather demand\n\n`;
       });
       
       recommendations.push({
@@ -377,10 +377,10 @@ export function generateSmartRecommendations(
   });
   
   if (shortageAlerts.length > 0) {
-    let alertText = "🚨 **URGENT STOCK ALERTS**\n\n";
+    let alertText = "🚨 URGENT STOCK ALERTS\n\n";
     
     shortageAlerts.forEach(alert => {
-      alertText += `• **${alert.product}**: ${alert.issue}\n`;
+      alertText += `• ${alert.product}: ${alert.issue}\n`;
       alertText += `  - ${alert.action}\n`;
       alertText += `  - Average daily sales: ${alert.avg_sales.toFixed(1)} units\n\n`;
     });
@@ -398,23 +398,62 @@ export function generateSmartRecommendations(
 }
 
 export function calculateKeyMetrics(data: ProcessedInventoryData[], previousData?: ProcessedInventoryData[]) {
-  const totalSales = data.reduce((sum, item) => sum + item.Sold, 0);
-  const avgStock = data.reduce((sum, item) => sum + item.Stock, 0) / data.length;
-  const uniqueProducts = new Set(data.map(item => item.Product)).size;
-  const outOfStock = data.filter(item => item.Stock <= 0).length;
+  if (!data || data.length === 0) {
+    return {
+      totalSales: 0,
+      avgStock: 0,
+      uniqueProducts: 0,
+      outOfStock: 0,
+      deltaSales: 0
+    };
+  }
+
+  // Filter out invalid data points
+  const validData = data.filter(item => 
+    typeof item.Sold === 'number' && 
+    typeof item.Stock === 'number' && 
+    isFinite(item.Sold) && 
+    isFinite(item.Stock) &&
+    item.Sold >= 0 &&
+    item.Stock >= 0
+  );
+
+  if (validData.length === 0) {
+    return {
+      totalSales: 0,
+      avgStock: 0,
+      uniqueProducts: 0,
+      outOfStock: 0,
+      deltaSales: 0
+    };
+  }
+
+  const totalSales = validData.reduce((sum, item) => sum + item.Sold, 0);
+  const totalStock = validData.reduce((sum, item) => sum + item.Stock, 0);
+  const avgStock = totalStock / validData.length;
+  const uniqueProducts = new Set(validData.map(item => item.Product)).size;
+  const outOfStock = validData.filter(item => item.Stock <= 0).length;
   
   let deltaSales = 0;
-  if (previousData) {
-    const prevTotalSales = previousData.reduce((sum, item) => sum + item.Sold, 0);
-    deltaSales = totalSales - prevTotalSales;
+  if (previousData && previousData.length > 0) {
+    const validPrevData = previousData.filter(item => 
+      typeof item.Sold === 'number' && 
+      isFinite(item.Sold) &&
+      item.Sold >= 0
+    );
+    
+    if (validPrevData.length > 0) {
+      const prevTotalSales = validPrevData.reduce((sum, item) => sum + item.Sold, 0);
+      deltaSales = totalSales - prevTotalSales;
+    }
   }
   
   return {
-    totalSales,
-    avgStock,
+    totalSales: Math.round(totalSales),
+    avgStock: Math.round(avgStock * 100) / 100, // Round to 2 decimal places
     uniqueProducts,
     outOfStock,
-    deltaSales
+    deltaSales: Math.round(deltaSales)
   };
 }
 

@@ -15,7 +15,7 @@ import {
   Line, 
   ResponsiveContainer 
 } from 'recharts';
-import { TrendingUp, TrendingDown, AlertTriangle, CheckCircle } from 'lucide-react';
+import { TrendingUp, TrendingDown, AlertTriangle, CheckCircle, Target, Activity, BarChart3 } from 'lucide-react';
 import { ProcessedInventoryData, KeyMetrics, RestockPrediction } from '@/types/inventory';
 
 interface DashboardTabProps {
@@ -25,6 +25,26 @@ interface DashboardTabProps {
 }
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+
+// Utility function to format large numbers
+const formatNumber = (num: number): string => {
+  if (num === 0) return '0';
+  if (num < 1000) return Math.round(num).toLocaleString();
+  if (num < 1000000) return `${(num / 1000).toFixed(1)}K`;
+  if (num < 1000000000) return `${(num / 1000000).toFixed(1)}M`;
+  if (num < 1000000000000) return `${(num / 1000000000).toFixed(1)}B`;
+  return `${(num / 1000000000000).toFixed(1)}T`;
+};
+
+// Utility function to format stock values
+const formatStock = (num: number): string => {
+  if (num === 0) return '0';
+  if (isNaN(num) || !isFinite(num)) return '0';
+  if (num < 100) return num.toFixed(1);
+  if (num < 1000) return Math.round(num).toString();
+  if (num < 1000000) return `${(num / 1000).toFixed(1)}K`;
+  return `${(num / 1000000).toFixed(1)}M`;
+};
 
 const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPredictions }) => {
   // Prepare chart data
@@ -83,12 +103,12 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
             <div>
               <p className="text-sm font-medium text-gray-400 mb-1">Total Sales</p>
               <p className="text-3xl font-bold text-white group-hover:scale-105 transition-transform">
-                {keyMetrics.totalSales.toLocaleString()}
+                {formatNumber(keyMetrics.totalSales)}
               </p>
             </div>
             <div className="flex items-center text-green-400 bg-green-400/10 px-3 py-2 rounded-xl">
               <TrendingUp className="h-5 w-5 mr-1" />
-              <span className="text-sm font-semibold">+{keyMetrics.deltaSales || 0}</span>
+              <span className="text-sm font-semibold">+{formatNumber(Math.abs(keyMetrics.deltaSales || 0))}</span>
             </div>
           </div>
         </div>
@@ -98,12 +118,12 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
             <div>
               <p className="text-sm font-medium text-gray-400 mb-1">Avg Stock</p>
               <p className="text-3xl font-bold text-white group-hover:scale-105 transition-transform">
-                {keyMetrics.avgStock.toFixed(1)}
+                {formatStock(keyMetrics.avgStock)}
               </p>
             </div>
             <div className="flex items-center text-blue-400 bg-blue-400/10 px-3 py-2 rounded-xl">
               <TrendingDown className="h-5 w-5 mr-1" />
-              <span className="text-sm font-semibold">-2.5</span>
+              <span className="text-sm font-semibold">-2.5%</span>
             </div>
           </div>
         </div>
@@ -117,7 +137,7 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
               </p>
             </div>
             <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">📦</span>
+              <Target className="h-6 w-6 text-white" />
             </div>
           </div>
         </div>
@@ -130,9 +150,19 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
                 {keyMetrics.outOfStock}
               </p>
             </div>
-            <div className="flex items-center text-red-400 bg-red-400/10 px-3 py-2 rounded-xl">
-              <AlertTriangle className="h-5 w-5 mr-1" />
-              <span className="text-sm font-semibold">+{keyMetrics.outOfStock}</span>
+            <div className={`flex items-center px-3 py-2 rounded-xl ${
+              keyMetrics.outOfStock > 0 
+                ? 'text-red-400 bg-red-400/10' 
+                : 'text-green-400 bg-green-400/10'
+            }`}>
+              {keyMetrics.outOfStock > 0 ? (
+                <AlertTriangle className="h-5 w-5 mr-1" />
+              ) : (
+                <CheckCircle className="h-5 w-5 mr-1" />
+              )}
+              <span className="text-sm font-semibold">
+                {keyMetrics.outOfStock > 0 ? `+${keyMetrics.outOfStock}` : '✓'}
+              </span>
             </div>
           </div>
         </div>
@@ -141,7 +171,9 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
       {/* Quick Status Overview */}
       <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
         <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-          <span className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">⚡</span>
+          <span className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl mr-3 flex items-center justify-center text-sm">
+            <Activity className="h-4 w-4 text-white" />
+          </span>
           Quick Status Overview
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -179,7 +211,9 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
         {/* Sales Over Time */}
         <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-            <span className="w-6 h-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg mr-3 flex items-center justify-center text-xs">📈</span>
+            <span className="w-6 h-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg mr-3 flex items-center justify-center text-xs">
+              <TrendingUp className="h-3 w-3 text-white" />
+            </span>
             Sales Trends Over Time
           </h3>
           <ResponsiveContainer width="100%" height={320}>
@@ -250,7 +284,9 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ data, keyMetrics, restockPr
         {/* Stock vs Sales by Category */}
         <div className="bg-gray-900/30 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-xl lg:col-span-2">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-            <span className="w-6 h-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">📊</span>
+            <span className="w-6 h-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg mr-3 flex items-center justify-center text-xs">
+              <BarChart3 className="h-3 w-3 text-white" />
+            </span>
             Stock vs Sales by Category
           </h3>
           <ResponsiveContainer width="100%" height={350}>
